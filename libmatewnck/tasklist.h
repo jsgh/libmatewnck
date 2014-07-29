@@ -101,6 +101,8 @@ void matewnck_tasklist_set_button_relief (MatewnckTasklist *tasklist,
                                       GtkReliefStyle relief);
 void matewnck_tasklist_set_orientation(MatewnckTasklist *tasklist,
                                        GtkOrientation orient);
+void matewnck_tasklist_set_scroll_wheel (MatewnckTasklist *tasklist,
+                                         gboolean          enable_scroll_wheel);
 #ifndef MATEWNCK_DISABLE_DEPRECATED
 void matewnck_tasklist_set_minimum_width (MatewnckTasklist *tasklist, gint size);
 gint matewnck_tasklist_get_minimum_width (MatewnckTasklist *tasklist);

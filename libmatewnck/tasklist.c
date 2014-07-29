@@ -191,6 +191,8 @@ struct _MatewnckTasklistPrivate
   
   gboolean include_all_workspaces;
   
+  gboolean enable_scroll_wheel;
+
   /* Calculated by update_lists */
   GList *class_groups;
   GList *windows;
@@ -721,6 +723,7 @@ matewnck_tasklist_init (MatewnckTasklist *tasklist)
   tasklist->priv->active_class_group = NULL;
 
   tasklist->priv->include_all_workspaces = FALSE;
+  tasklist->priv->enable_scroll_wheel = TRUE;
 
   tasklist->priv->class_groups = NULL;
   tasklist->priv->windows = NULL;
@@ -1089,6 +1092,27 @@ matewnck_tasklist_set_include_all_workspaces (MatewnckTasklist *tasklist,
   tasklist->priv->include_all_workspaces = include_all_workspaces;
   matewnck_tasklist_update_lists (tasklist);
   gtk_widget_queue_resize (GTK_WIDGET (tasklist));
+}
+
+/**
+ * matewnck_tasklist_set_scroll_wheel:
+ * @tasklist: a #MatewnckTasklist.
+ * @enable_scroll_wheel: whether to switch windows on scroll wheel events
+ *
+ * Sets @tasklist to switch windows when the mouse scroll wheel is turned.
+ */
+void
+matewnck_tasklist_set_scroll_wheel (MatewnckTasklist *tasklist,
+                                    gboolean          enable_scroll_wheel)
+{
+  g_return_if_fail (MATEWNCK_IS_TASKLIST (tasklist));
+
+  enable_scroll_wheel = (enable_scroll_wheel != 0);
+
+  if (tasklist->priv->enable_scroll_wheel == enable_scroll_wheel)
+    return;
+  
+  tasklist->priv->enable_scroll_wheel = enable_scroll_wheel;
 }
 
 /**
@@ -2177,6 +2201,9 @@ matewnck_tasklist_scroll_cb (MatewnckTasklist *tasklist,
   GList *window;
   gint row = 0;
   gint col = 0;
+
+  if (!tasklist->priv->enable_scroll_wheel)
+    return TRUE;
 
   window = g_list_find (tasklist->priv->windows,
                         tasklist->priv->active_task);
